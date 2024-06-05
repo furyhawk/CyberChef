@@ -54,6 +54,9 @@ jobs:
           type=semver,pattern={{major}}.{{minor}}
           type=semver,pattern={{version}}
 
+    - name: Set up QEMU
+      uses: docker/setup-qemu-action@v3
+
     - name: Production Image Build
       id: build-image
       uses: redhat-actions/buildah-build@v2
@@ -61,7 +64,7 @@ jobs:
         tags: ${{ steps.image-metadata.outputs.tags }}
         labels: ${{ steps.image-metadata.outputs.labels }}
         containerfiles: ./Dockerfile
-        platforms: linux/amd64
+        platforms: linux/amd64,linux/arm64
         oci: true
         # Webpack seems to use a lot of open files, increase the max open file limit to accomodate.
         extra-args: |
